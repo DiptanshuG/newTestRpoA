@@ -14,6 +14,8 @@ import SellersList from './components/SellersList'
 import MasterCatalogList from "./components/MasterCatalogList";
 import MasterCatalogForm from "./components/MasterCatalogForm";
 import UpdateMasterProductData from "./components/UpdateMasterProductData";
+import SettlementsList from './screens/SettlementScreen';
+import SettlementsDetails from './screens/SettlementDetailScreen'
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           {/* <Route path='/user-profile' element={<ProfileScreen />} /> */}
         </Route>
+        <Route path="/settlement" element={<SettlementsList />} />
+        <Route path="/settlement/:settlementId" element={<SettlementsDetails />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
 

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import { v4 as uuid } from "uuid";
 
 export const SETTLEMENT_STATE = {
-    INITIATED: "Initiated",
+    PENDING: "Pending",
     PROCESSING: "Processing",
     COMPLETED: "Completed",
     FAILED: "Failed",
@@ -67,7 +68,7 @@ const settlementSchema = new mongoose.Schema(
         status: {
             type: String,
             enum: Object.values(SETTLEMENT_STATE),
-            default: SETTLEMENT_STATE.INITIATED,
+            default: SETTLEMENT_STATE.PENDING,
         },
 
         remarks: {

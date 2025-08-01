@@ -1,5 +1,5 @@
 import { BarChart3, MessageSquare, Package, Settings, ShoppingCart, Users } from "lucide-react";
-import React from "react";
+import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
@@ -9,6 +9,7 @@ const Sidebar = () => {
     { icon: <BarChart3 size={20} />, text: "Dashboard", to: "/dashboard" },
     { icon: <Users size={20} />, text: "Sellers", to: "/sellers" },
     { icon: <Package size={20} />, text: "Master Catalog", to: "/mastercatalog" },
+    { icon: <RiMoneyRupeeCircleLine size={20} />, text: "Settlement", to: "/settlement" },
     { icon: <ShoppingCart size={20} />, text: "Orders", to: "/orders" },
     { icon: <MessageSquare size={20} />, text: "Support", to: "/support" },
     { icon: <Settings size={20} />, text: "Settings", to: "/settings" },
