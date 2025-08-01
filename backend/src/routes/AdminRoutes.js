@@ -2,6 +2,7 @@ import express from 'express';
 import { login, signup } from '../controllers/AdminController.js';
 import { getAdminSellers, getDashboardMetrics, getSellerDetailsById, getAllStoreProducts } from '../controllers/SellerController.js';
 import { validate } from '../middlewares/validate.js';
+import settlementRoutes from './settlement.route.js';
 
 import { loginSchema, registerSchema } from '../schemas/AuthSchema.js';
 
@@ -22,5 +23,7 @@ router.use("/mastercatalog", masterCatalogRoutes);
 
 router.use("/sellers/import-catalogue", catalogImportRoute);
 
+// Settlement Flow
+router.use('/settlement', settlementRoutes);
 
 export default router;
