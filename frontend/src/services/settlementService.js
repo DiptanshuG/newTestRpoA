@@ -24,3 +24,8 @@ export const runSettlement = async () => {
     const response = await axios.post(`${BASE_URL}/settlement/run`);
     return response.data;
 };
+
+export const updateSettlementStatus = async ({ settlementId, status }) => {
+    const response = await axios.put(`${BASE_URL}/settlement/${settlementId}`, { status });
+    return response.data;
+};

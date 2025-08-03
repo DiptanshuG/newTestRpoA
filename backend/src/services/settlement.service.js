@@ -180,10 +180,7 @@ export const getSettlementDetails = async (settlementId) => {
 export const updateSettlementStatus = async (settlementId, data) => {
     const update = {
         status: data.status,
-        remarks: data.remarks || '',
-        utrNumber: data.utrNumber || null,
         settlementDate: new Date(),
-        settledBy: data.settledBy
     };
 
     return await Settlement.findOneAndUpdate({ settlementId }, update, { new: true });

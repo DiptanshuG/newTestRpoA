@@ -31,9 +31,9 @@ export const getSettlementDetails = async (req, res) => {
 export const updateSettlementStatus = async (req, res) => {
     try {
         const { settlementId } = req.params;
-        const { status, remarks, utrNumber, settledBy } = req.body;
+        const { status } = req.body;
         const updated = await SettlementService.updateSettlementStatus(settlementId, {
-            status, remarks, utrNumber, settledBy
+            status
         });
         res.status(200).json(updated);
     } catch (err) {
