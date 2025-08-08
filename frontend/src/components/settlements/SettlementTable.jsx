@@ -70,7 +70,6 @@ const SettlementTable = () => {
                     <tr className="bg-gray-100">
                         <th className="border p-2">Settlement ID</th>
                         <th className="border p-2">Date Range</th>
-                        <th className="border p-2">Total Orders</th>
                         <th className="border p-2">Total Payout</th>
                         <th className="border p-2">Status</th>
                         <th className="border p-2">Action</th>
@@ -85,7 +84,6 @@ const SettlementTable = () => {
                             <tr key={s._id} className="text-center">
                                 <td className="border p-2">{s.settlementId}</td>
                                 <td className="border p-2">{new Date(s.fromDate).toLocaleDateString()} - {new Date(s.toDate).toLocaleDateString()}</td>
-                                <td className="border p-2">{s.totals.totalOrders}</td>
                                 <td className="border p-2">₹{s.totals.totalPayout}</td>
                                 <td className="border p-2">{s.status}</td>
                                 <td className="border px-3 py-2 align-top">

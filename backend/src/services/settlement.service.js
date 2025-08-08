@@ -109,6 +109,30 @@ export const getSettlementDetails = async (settlementId) => {
         throw new Error('Settlement not found');
     }
 
+    // Get all order IDs from this settlement
+    const allOrderIds = settlement.orderIds.map(o => o.orderId);
+
+    // Fetch all seller invoices for these orders
+    const invoices = await SellerInvoice.find({ orderId: { $in: allOrderIds } }).lean();
+    const invoiceMap = new Map(invoices.map(inv => [inv.orderId, inv]));
+
+    // Merge invoice data into orders
+    settlement.orderIds = settlement.orderIds.map(order => {
+        const invoice = invoiceMap.get(order.orderId);
+        return {
+            ...order,
+            invoiceData: invoice ? {
+                totalOrderAmount: invoice.financialBreakup.productNetTotal + invoice.financialBreakup.gstOnProducts,
+                platformCommission: invoice.financialBreakup.platformCommissionAmount + invoice.financialBreakup.gstOnCommission,
+                tdsDeducted: invoice.financialBreakup.tdsDeducted,
+                tcsDeducted: invoice.financialBreakup.tcsDeducted,
+                deliveryCharges: invoice.financialBreakup.deliveryCharges + invoice.financialBreakup.deliveryChargesGST,
+                packagingCharges: invoice.financialBreakup.packagingCharges + invoice.financialBreakup.packagingChargesGST,
+                netPayoutToSeller: invoice.financialBreakup.netPayoutToSeller
+            } : null
+        };
+    });
+
     // Step 2: Extract all product IDs from order items
     const allProductIds = settlement.orderIds
         .flatMap(order => order.items.map(item => item.id))
@@ -140,19 +164,19 @@ export const getSettlementDetails = async (settlementId) => {
 
     // Step 7: Fetch only provider business names
     const providers = await Provider.find({ _id: { $in: providerIds } })
-        .select('_id businessName')
+        .select('_id businessName bankDetails address.city address.state')
         .lean();
 
     // Step 8: Create lookup maps
     const productMap = new Map(products.map(p => [p._id.toString(), p]));
     const masterProductMap = new Map(masterProducts.map(mp => [mp._id.toString(), mp]));
-    const providerMap = new Map(providers.map(p => [p._id, p.businessName]));
+    const providerMap = new Map(providers.map(p => [p._id.toString(), p]));
 
     // Step 9: Enrich each order with product, masterProduct, providerBusinessName
     settlement.orderIds.forEach(order => {
         // Attach provider business name
         const providerId = order.provider?.id;
-        order.businessName = providerMap.get(providerId) || null;
+        order.provider = providerMap.get(providerId) || null;
 
         // Attach enriched product to each item
         order.items = order.items.map(item => {
